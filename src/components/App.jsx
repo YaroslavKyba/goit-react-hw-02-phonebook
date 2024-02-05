@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { ContactList } from './ContactList/ContactList';
 
 export class App extends Component {
   state = {
@@ -13,24 +14,46 @@ export class App extends Component {
     number: '',
   };
 
+  handleFormSubmit = event => {
+    event.preventDefault();
+
+    const nameInput = event.currentTarget.elements.name.value;
+    const numberInput = event.currentTarget.elements.number.value;
+    console.log(nameInput, numberInput);
+  };
+
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
+  };
+
   render() {
+    // const { id, name, number } = this.state.contacts;
     return (
       <div>
         <h2>Phonebook</h2>
-        <label>
-          <span>Name</span>
-          <input type="text" name="name" required />
-        </label>
-        <label>
-          <span>Number</span>
-          <input type="tel" name="number" required />
-        </label>
-        <button type="submit">Add Contact</button>
-
-        <ul>Contacts</ul>
-        <li name="Rozie" id="dsf">
-          Rozie
-        </li>
+        <form onSubmit={this.handleFormSubmit}>
+          <label>
+            <span>Name</span>
+            <input
+              type="text"
+              name="name"
+              placeholder="Dzek Horobets"
+              required
+            />
+          </label>
+          <label>
+            <span>Number</span>
+            <input type="tel" name="number" placeholder="245-34-45" required />
+          </label>
+          <button type="submit">Add Contact</button>
+        </form>
+        <h2>Contacts</h2>
+        <ContactList
+          contacts={this.state.contacts}
+          ondeleteContact={this.deleteContact}
+        />
       </div>
     );
   }
