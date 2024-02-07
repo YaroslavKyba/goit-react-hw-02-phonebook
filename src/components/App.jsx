@@ -5,6 +5,8 @@ import { ContactList } from './ContactList/ContactList';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 
+import css from './App.module.css';
+
 export class App extends Component {
   state = {
     contacts: [
@@ -17,6 +19,15 @@ export class App extends Component {
   };
 
   handleAddContact = ({ name, number }) => {
+    const hasDublicates = this.state.contacts.some(
+      contact => contact.name === name
+    );
+
+    if (hasDublicates) {
+      alert(`${name} is already in contact`);
+      return;
+    }
+
     const contact = {
       id: nanoid(),
       name,
@@ -51,10 +62,10 @@ export class App extends Component {
     const { filter } = this.state;
 
     return (
-      <div>
-        <h1>Phonebook</h1>
+      <div className={css.form}>
+        <h1 className={css.title}>Phonebook</h1>
         <ContactForm onAddContact={this.handleAddContact} />
-        <h2>Contacts</h2>
+        <h2 className={css.title}>Contacts</h2>
         <Filter value={filter} onChange={this.changeFilter} />
         <ContactList
           contacts={this.filteredContactList()}
